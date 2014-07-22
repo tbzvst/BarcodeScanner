@@ -400,6 +400,8 @@ parentViewController:(UIViewController*)parentViewController
         decodeHints.addFormat(BarcodeFormat_CODE_128);
         decodeHints.addFormat(BarcodeFormat_CODE_39);
         //            decodeHints.addFormat(BarcodeFormat_ITF);   causing crashes
+
+        decodeHints.setTryHarder(true);
         
         // here's the meat of the decode process
         Ref<LuminanceSource>   luminanceSource   ([self getLuminanceSourceFromSample: sampleBuffer imageBytes:&imageBytes]);
@@ -587,7 +589,7 @@ parentViewController:(UIViewController*)parentViewController
     ALAssetsLibrary* assetsLibrary = [[[ALAssetsLibrary alloc] init] autorelease];
     [assetsLibrary
      writeImageToSavedPhotosAlbum:image.CGImage
-     orientation:ALAssetOrientationUp
+     orientation:ALAssetOrientationRight
      completionBlock:^(NSURL* assetURL, NSError* error){
          if (error) NSLog(@"   error writing image to library");
          else       NSLog(@"   wrote image to library %@", assetURL);
@@ -638,7 +640,7 @@ parentViewController:(UIViewController*)parentViewController
     previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     
     if ([previewLayer isOrientationSupported]) {
-        [previewLayer setOrientation:AVCaptureVideoOrientationPortrait];
+        [previewLayer setOrientation:AVCaptureVideoOrientationLandscapeRight];
     }
     
     [self.view.layer insertSublayer:previewLayer below:[[self.view.layer sublayers] objectAtIndex:0]];
@@ -821,17 +823,17 @@ parentViewController:(UIViewController*)parentViewController
 
 - (BOOL)shouldAutorotate
 {   
-    return NO;
+    return YES;
 }
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
 {
-    return UIInterfaceOrientationPortrait;
+    return UIInterfaceOrientationLandscapeRight;
 }
 
 - (NSUInteger)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskLandscape;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
